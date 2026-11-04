@@ -1,11 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projects, categories } from "../data/projects";
 import { Section, Img } from "./Section";
+
+const ytId = (u = "") => { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; };
+
+// Card thumbnail: if the project has a `video`, the video IS the thumbnail
+// (plays on hover on desktop, autoplays muted while visible on phones). Otherwise it's the image.
+function CardThumb({ p }) {
+  const v = useRef();
+  useEffect(() => {
+    const el = v.current;
+    if (!p.video || !el || !matchMedia("(hover: none)").matches) return;
+    const o = new IntersectionObserver(([e]) => (e.isIntersecting ? el.play().catch(() => {}) : el.pause()), { threshold: 0.6 });
+    o.observe(el); return () => o.disconnect();
+  }, [p.video]);
+  const zoom = "w-full h-full object-cover group-hover:scale-105 transition duration-500";
+  if (p.video) return (
+    <>
+      <video ref={v} src={`${p.video}#t=0.1`} poster={p.image} muted loop playsInline preload="metadata" className={zoom}
+        onMouseEnter={(e) => e.currentTarget.play().catch(() => {})}
+        onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0.1; }} />
+      <span className="chip absolute top-2 right-2 !bg-black/70">▶ Video</span>
+    </>
+  );
+  return (
+    <>
+      <Img src={p.image} alt={p.title} className={zoom} />
+      {ytId(p.youtube) && <span className="chip absolute top-2 right-2 !bg-black/70">▶ Video</span>}
+    </>
+  );
+}
 
 export function ProjectCard({ p, onOpen }) {
   return (
     <article className="glass overflow-hidden group flex flex-col hover:border-orange-500/50 transition">
-      <div className="overflow-hidden aspect-video"><Img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /></div>
+      <div className="overflow-hidden aspect-video relative"><CardThumb p={p} /></div>
       <div className="p-5 flex flex-col gap-3 flex-1">
         <span className="text-xs text-amber-300">{p.category}</span>
         <h3 className="font-display text-xl font-bold">{p.title}</h3>
@@ -23,14 +52,20 @@ export function ProjectCard({ p, onOpen }) {
 }
 
 export function ProjectModal({ p, onClose }) {
-  const shots = [p.image, ...(p.images || [])];
+  // Slider order: local video, YouTube video, then cover image + screenshots
+  const media = [
+    ...(p.video ? [{ t: "video", src: p.video }] : []),
+    ...(ytId(p.youtube) ? [{ t: "yt", id: ytId(p.youtube) }] : []),
+    ...[p.image, ...(p.images || [])].map((src) => ({ t: "img", src })),
+  ];
   const [i, setI] = useState(0);
-  const go = (d) => setI((x) => (x + d + shots.length) % shots.length);
+  const go = (d) => setI((x) => (x + d + media.length) % media.length);
   useEffect(() => {
     const k = (e) => (e.key === "Escape" ? onClose() : e.key === "ArrowRight" ? go(1) : e.key === "ArrowLeft" && go(-1));
     window.addEventListener("keydown", k); document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", k); document.body.style.overflow = ""; };
   });
+  const m = media[i];
   const Row = ({ h, children }) => <div><h4 className="text-orange-300 text-sm font-semibold mb-1">{h}</h4><div className="text-slate-300 text-sm">{children}</div></div>;
   return (
     <div className="fixed inset-0 z-50 bg-black/80 overflow-y-auto p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label={p.title}>
@@ -39,15 +74,20 @@ export function ProjectModal({ p, onClose }) {
           <div><span className="text-xs text-amber-300">{p.category}</span><h3 className="font-display text-2xl font-bold">{p.title}</h3></div>
           <button onClick={onClose} className="btn btn-ghost !py-1 !px-3" aria-label="Close">✕</button>
         </div>
-        <div className="relative mt-4 rounded-xl overflow-hidden aspect-video">
-          <Img src={shots[i]} alt={`${p.title} screenshot ${i + 1}`} className="w-full h-full object-cover" />
-          {shots.length > 1 && <>
-            <button onClick={() => go(-1)} className="absolute left-2 top-1/2 btn glass !p-2" aria-label="Previous">‹</button>
-            <button onClick={() => go(1)} className="absolute right-2 top-1/2 btn glass !p-2" aria-label="Next">›</button>
+        <div className="relative mt-4 rounded-xl overflow-hidden aspect-video bg-black">
+          {m.t === "img" && <Img src={m.src} alt={`${p.title} screenshot ${i + 1}`} className="w-full h-full object-cover" />}
+          {m.t === "video" && <video key={i} src={m.src} poster={p.image} controls autoPlay muted playsInline className="w-full h-full object-contain" />}
+          {m.t === "yt" && <iframe key={i} src={`https://www.youtube-nocookie.com/embed/${m.id}`} title={`${p.title} video`} allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen className="w-full h-full" />}
+          {media.length > 1 && <>
+            <button onClick={() => go(-1)} className="absolute left-2 top-1/3 btn glass !p-2" aria-label="Previous">‹</button>
+            <button onClick={() => go(1)} className="absolute right-2 top-1/3 btn glass !p-2" aria-label="Next">›</button>
           </>}
         </div>
-        {shots.length > 1 && <div className="flex gap-2 mt-2 overflow-x-auto">{shots.map((s, n) => (
-          <button key={n} onClick={() => setI(n)} className={`w-20 shrink-0 rounded overflow-hidden border ${n === i ? "border-orange-500" : "border-transparent opacity-60"}`}><Img src={s} alt={`${p.title} thumb ${n + 1}`} className="aspect-video object-cover" /></button>
+        {media.length > 1 && <div className="flex gap-2 mt-2 overflow-x-auto">{media.map((x, n) => (
+          <button key={n} onClick={() => setI(n)} className={`relative w-20 shrink-0 rounded overflow-hidden border ${n === i ? "border-orange-500" : "border-transparent opacity-60"}`}>
+            <Img src={x.t === "img" ? x.src : p.image} alt={`${p.title} thumb ${n + 1}`} className="aspect-video object-cover" />
+            {x.t !== "img" && <span className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-sm">▶</span>}
+          </button>
         ))}</div>}
         <div className="grid gap-4 mt-5">
           <p className="text-slate-300">{p.description}</p>
