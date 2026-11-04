@@ -19,7 +19,7 @@ function Loader({ onStart, onGone }) {
   }, []);
   const C = 2 * Math.PI * 30;
   return (
-    <div className={`fixed inset-0 z-[60] bg-[#070b14] flex items-center justify-center transition-opacity duration-500 ${leaving ? "opacity-0" : "opacity-100"}`} role="status" aria-label="Loading">
+    <div className={`fixed inset-0 z-[60] bg-[#0b0908] flex items-center justify-center transition-opacity duration-500 ${leaving ? "opacity-0" : "opacity-100"}`} role="status" aria-label="Loading">
       <div className="relative w-16 h-16 flex items-center justify-center text-xs font-mono">
         <svg className="absolute inset-0 -rotate-90" viewBox="0 0 64 64" aria-hidden="true">
           <circle cx="32" cy="32" r="30" fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="1.5" />

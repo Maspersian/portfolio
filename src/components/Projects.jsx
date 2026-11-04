@@ -4,10 +4,10 @@ import { Section, Img } from "./Section";
 
 export function ProjectCard({ p, onOpen }) {
   return (
-    <article className="glass overflow-hidden group flex flex-col hover:border-cyan-400/50 transition">
+    <article className="glass overflow-hidden group flex flex-col hover:border-orange-500/50 transition">
       <div className="overflow-hidden aspect-video"><Img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" /></div>
       <div className="p-5 flex flex-col gap-3 flex-1">
-        <span className="text-xs text-violet-300">{p.category}</span>
+        <span className="text-xs text-amber-300">{p.category}</span>
         <h3 className="font-display text-xl font-bold">{p.title}</h3>
         <p className="text-sm text-slate-400">{p.description}</p>
         <div className="flex flex-wrap gap-1.5">{p.technologies.map((t) => <span key={t} className="chip">{t}</span>)}</div>
@@ -31,12 +31,12 @@ export function ProjectModal({ p, onClose }) {
     window.addEventListener("keydown", k); document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", k); document.body.style.overflow = ""; };
   });
-  const Row = ({ h, children }) => <div><h4 className="text-cyan-300 text-sm font-semibold mb-1">{h}</h4><div className="text-slate-300 text-sm">{children}</div></div>;
+  const Row = ({ h, children }) => <div><h4 className="text-orange-300 text-sm font-semibold mb-1">{h}</h4><div className="text-slate-300 text-sm">{children}</div></div>;
   return (
     <div className="fixed inset-0 z-50 bg-black/80 overflow-y-auto p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label={p.title}>
-      <div className="glass !bg-[#0b1120] max-w-3xl mx-auto my-8 p-5 md:p-7" onClick={(e) => e.stopPropagation()}>
+      <div className="glass !bg-[#140e0b] max-w-3xl mx-auto my-8 p-5 md:p-7" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-start gap-4">
-          <div><span className="text-xs text-violet-300">{p.category}</span><h3 className="font-display text-2xl font-bold">{p.title}</h3></div>
+          <div><span className="text-xs text-amber-300">{p.category}</span><h3 className="font-display text-2xl font-bold">{p.title}</h3></div>
           <button onClick={onClose} className="btn btn-ghost !py-1 !px-3" aria-label="Close">✕</button>
         </div>
         <div className="relative mt-4 rounded-xl overflow-hidden aspect-video">
@@ -47,7 +47,7 @@ export function ProjectModal({ p, onClose }) {
           </>}
         </div>
         {shots.length > 1 && <div className="flex gap-2 mt-2 overflow-x-auto">{shots.map((s, n) => (
-          <button key={n} onClick={() => setI(n)} className={`w-20 shrink-0 rounded overflow-hidden border ${n === i ? "border-cyan-400" : "border-transparent opacity-60"}`}><Img src={s} alt={`${p.title} thumb ${n + 1}`} className="aspect-video object-cover" /></button>
+          <button key={n} onClick={() => setI(n)} className={`w-20 shrink-0 rounded overflow-hidden border ${n === i ? "border-orange-500" : "border-transparent opacity-60"}`}><Img src={s} alt={`${p.title} thumb ${n + 1}`} className="aspect-video object-cover" /></button>
         ))}</div>}
         <div className="grid gap-4 mt-5">
           <p className="text-slate-300">{p.description}</p>
@@ -73,7 +73,7 @@ export default function Projects({ onOpen }) {
   const list = projects.filter((p) => cat === "All" || p.category === cat);
   return (
     <Section id="projects" title="Projects" sub="Featured work first, then everything filtered by category.">
-      <h3 className="font-display text-lg mb-4 text-cyan-300">Featured</h3>
+      <h3 className="font-display text-lg mb-4 text-orange-300">Featured</h3>
       <div className="grid md:grid-cols-2 gap-5 mb-14">{featured.map((p) => <ProjectCard key={p.id} p={p} onOpen={onOpen} />)}</div>
       <div className="flex flex-wrap gap-2 mb-6">{categories.map((c) => (
         <button key={c} onClick={() => setCat(c)} className={`btn !py-1.5 text-sm ${cat === c ? "btn-primary" : "btn-ghost"}`}>{c}</button>))}</div>

@@ -12,7 +12,7 @@ export const Skills = () => (
   <Section id="skills" title="Technical skills">
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {Object.entries(site.skills).map(([g, items]) => (
-        <div key={g} className="glass p-5 hover:border-cyan-400/40 transition">
+        <div key={g} className="glass p-5 hover:border-orange-500/40 transition">
           <h3 className="font-display font-bold mb-3">{g}</h3>
           <div className="flex flex-wrap gap-2">{items.map((s) => <span key={s} className="chip">{s}</span>)}</div>
         </div>))}
@@ -22,13 +22,13 @@ export const Skills = () => (
 
 export const Experience = () => (
   <Section id="experience" title="Experience">
-    <ol className="border-l border-cyan-400/30 ml-2 space-y-8">
+    <ol className="border-l border-orange-500/30 ml-2 space-y-8">
       {site.experience.map((e) => (
         <li key={e.company} className="pl-6 relative">
-          <span className="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
-          <p className="text-xs text-violet-300">{e.period}</p>
+          <span className="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_#ff5a1f]" />
+          <p className="text-xs text-amber-300">{e.period}</p>
           <h3 className="font-display text-xl font-bold">{e.role}</h3>
-          <p className="text-cyan-300 text-sm mb-2">{e.company}</p>
+          <p className="text-orange-300 text-sm mb-2">{e.company}</p>
           <ul className="list-disc ml-5 text-slate-300 text-sm space-y-1">{e.points.map((p) => <li key={p}>{p}</li>)}</ul>
         </li>))}
     </ol>
@@ -40,13 +40,13 @@ const Flow = ({ steps }) => (
     {steps.map((s, i) => (
       <li key={s} className="flex items-center gap-3">
         <span className="glass px-4 py-2 text-sm">{s}</span>
-        {i < steps.length - 1 && <span className="text-cyan-400" aria-hidden="true">›</span>}
+        {i < steps.length - 1 && <span className="text-orange-500" aria-hidden="true">›</span>}
       </li>))}
   </ol>
 );
 
 export const XRShowcase = () => (
-  <section id="xr" className="py-20 bg-gradient-to-b from-transparent via-violet-950/30 to-transparent">
+  <section id="xr" className="py-20 bg-gradient-to-b from-transparent via-orange-950/30 to-transparent">
     <div className="max-w-6xl mx-auto px-5">
       <h2 className="font-display text-3xl md:text-4xl font-bold">XR / Mixed Reality Development</h2>
       <p className="text-slate-400 mt-2 max-w-2xl">Educational, interactive and multiplayer experiences for Meta Quest.</p>
@@ -76,14 +76,14 @@ export function Contact() {
     e.preventDefault();
     location.href = `mailto:${site.email}?subject=${encodeURIComponent("Portfolio message from " + f.name)}&body=${encodeURIComponent(f.message + "\n\n" + f.name + " (" + f.email + ")")}`;
   };
-  const inp = "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 focus:border-cyan-400 outline-none";
+  const inp = "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 focus:border-orange-500 outline-none";
   return (
     <Section id="contact" title="Let's build something interactive" sub="Available for Unity Developer / XR Developer opportunities">
       <div className="grid md:grid-cols-2 gap-10">
         <ul className="space-y-3 text-slate-300">
-          <li>✉️ <a className="hover:text-cyan-300" href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li>💼 <a className="hover:text-cyan-300" href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
-          <li>💻 <a className="hover:text-cyan-300" href={site.github} target="_blank" rel="noreferrer">GitHub</a></li>
+          <li>✉️ <a className="hover:text-orange-300" href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>💼 <a className="hover:text-orange-300" href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
+          <li>💻 <a className="hover:text-orange-300" href={site.github} target="_blank" rel="noreferrer">GitHub</a></li>
           <li>📍 {site.location}</li>
         </ul>
         <form onSubmit={submit} className="space-y-3">
@@ -102,7 +102,7 @@ export const Footer = () => (
     <p className="font-display text-white text-lg">{site.name}</p>
     <p>{site.title}</p><p>{site.location}</p>
     <p className="mt-2 space-x-3">
-      <a href={site.linkedin} className="hover:text-cyan-300">LinkedIn</a><a href={site.github} className="hover:text-cyan-300">GitHub</a><a href={`mailto:${site.email}`} className="hover:text-cyan-300">Email</a>
+      <a href={site.linkedin} className="hover:text-orange-300">LinkedIn</a><a href={site.github} className="hover:text-orange-300">GitHub</a><a href={`mailto:${site.email}`} className="hover:text-orange-300">Email</a>
     </p>
     <p className="mt-3">© 2026 {site.name}</p>
   </footer>
