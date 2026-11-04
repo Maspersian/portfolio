@@ -6,13 +6,17 @@ import ParticlePortrait from "./ParticlePortrait";
 function Loader({ onDone }) {
   const [n, setN] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setN((v) => v + 4), 30);
-    return () => clearInterval(id);
+    let v = 0, t;
+    const id = setInterval(() => {
+      v = Math.min(v + 4, 100);
+      setN(v);
+      if (v >= 100) { clearInterval(id); t = setTimeout(onDone, 250); }
+    }, 30);
+    return () => { clearInterval(id); clearTimeout(t); };
   }, []);
-  useEffect(() => { if (n >= 100) { const t = setTimeout(onDone, 250); return () => clearTimeout(t); } }, [n]);
   return (
     <div className="fixed inset-0 z-[60] bg-[#070b14] flex items-center justify-center" role="status" aria-label="Loading">
-      <div className="w-16 h-16 rounded-full border border-red-500 flex items-center justify-center text-xs font-mono">{Math.min(n, 100)}</div>
+      <div className="w-16 h-16 rounded-full border border-red-500 flex items-center justify-center text-xs font-mono">{n}</div>
     </div>
   );
 }
