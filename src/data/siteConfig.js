@@ -4,9 +4,9 @@ export const site = {
   title: "Unity Developer | XR Developer",
   location: "Dubai, UAE",
   intro: "Unity Developer with hands-on experience building interactive games, XR/MR applications, multiplayer systems, and reusable interactive experiences.",
-  email: "your.email@example.com",            // <- change
-  linkedin: "https://www.linkedin.com/in/your-profile", // <- change
-  github: "https://github.com/your-username", // <- change
+  email: "muhammedafnans6913@gmail.com",            // <- change
+  linkedin: "https://www.linkedin.com/in/muhammed-afnan-s-589a1a263", // <- change
+  github: "https://github.com/Maspersian", // <- change
   cv: "/assets/Muhammed_Afnan_S_CV.pdf",      // file lives in public/assets/
   about: [
     "I'm a Unity Developer with around two years of experience across game development, XR/MR development, interactive applications, multiplayer systems, UI implementation and API integration.",
