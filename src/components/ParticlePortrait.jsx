@@ -165,7 +165,7 @@ export default function ParticlePortrait({ onReveal }) {
       };
       if (reduce) { ps.forEach((p) => { p.x = p.tx; p.y = p.ty; p.z = p.tz; }); f = 999; }
       tick();
-      timer = setTimeout(() => { revealedRef.current = true; setReveal(true); onReveal && onReveal(); }, reduce ? 0 : 5000);
+      timer = setTimeout(() => { revealedRef.current = true; setReveal(true); onReveal && onReveal(); }, reduce ? 0 : 10000);
     };
     img.onload = () => start(img);
     img.onerror = () => { console.warn("Portfolio photo not found:", PHOTO, "- check the file name in ParticlePortrait.jsx"); start(null); };
