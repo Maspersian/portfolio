@@ -31,7 +31,7 @@ function Loader({ onStart, onGone }) {
   );
 }
 
-const bigText = { fontSize: "clamp(4rem,19vw,18rem)", letterSpacing: "-0.04em", WebkitBackgroundClip: "text", color: "transparent" };
+const bigText = { fontSize: "clamp(4rem,19vw,18rem)", letterSpacing: "-0.04em", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" };
 
 export default function Hero() {
   const [ready, setReady] = useState(false);     // loader finished fading -> start animation
@@ -46,11 +46,11 @@ export default function Hero() {
       <div className="absolute inset-x-0 top-[18%] text-center font-display font-bold leading-none select-none pointer-events-none"
         style={{ opacity: ready ? 1 : 0, transform: ready ? "none" : "translateY(24px)", transition: "opacity 1.6s ease, transform 1.6s ease" }}>
         <h1 aria-label={`${site.name} - ${site.title}`}
-          style={{ ...bigText, background: "linear-gradient(180deg,#bdb2a0 5%,#6b6257 55%,transparent 100%)", WebkitBackgroundClip: "text", opacity: revealed ? 0 : 0.6, transition: "opacity 1.5s ease" }}>
+          style={{ ...bigText, backgroundImage: "linear-gradient(180deg,#bdb2a0 5%,#6b6257 55%,transparent 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", opacity: revealed ? 0 : 0.6, transition: "opacity 1.5s ease" }}>
           DEVELOPER
         </h1>
         <div aria-hidden="true" className="absolute inset-0"
-          style={{ ...bigText, background: "linear-gradient(180deg,#ef2f10 10%,#7a2a1d 60%,transparent 100%)", WebkitBackgroundClip: "text", opacity: revealed ? 1 : 0, transition: "opacity 1.5s ease" }}>
+          style={{ ...bigText, backgroundImage: "linear-gradient(180deg,#ef2f10 10%,#7a2a1d 60%,transparent 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", opacity: revealed ? 1 : 0, transition: "opacity 1.5s ease" }}>
           DEVELOPER
         </div>
       </div>
