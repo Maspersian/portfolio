@@ -10,6 +10,11 @@ export const projects = [
     title: "Bagheera Ludo", category: "Multiplayer",
     image: "/images/projects/bagheera-ludo/cover.jpg",
     images: ["/images/projects/bagheera-ludo/1.jpg", "/images/projects/bagheera-ludo/2.jpg"],
+    videos: [
+  "/videos/projects/bagheera-ludo/1.mp4",
+  "/videos/projects/bagheera-ludo/2.mp4",
+  "/videos/projects/bagheera-ludo/3.mp4",
+],
     description: "Unity multiplayer Ludo game built with C# and WebSocket communication.",
     role: "Sole Unity developer",
     technologies: ["Unity", "C#", "WebSocket", "REST API"], platform: "Android, iOS",
@@ -21,7 +26,7 @@ export const projects = [
   {
     id: "bagheera-carrom", featured: true,
     title: "Bagheera Carrom", category: "Multiplayer",
-    image: "/images/projects/bagheera-carrom/cover.jpg", images: [],
+    image: "/images/projects/bagheera-carrom/cover.jpg", images: ["/images/projects/bagheera-carrom/1.jpg"],
     description: "Unity multiplayer carrom game built with Photon Fusion and C#.",
     role: "Unity Developer", technologies: ["Unity", "Photon Fusion", "C#"], platform: "Android, iOS",
     features: ["Online multiplayer", "Physics-based gameplay"],
