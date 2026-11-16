@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { projects, categories } from "../data/projects";
 import { Section, Img } from "./Section";
 
+// Local videos: use `videos: [..]` (several) or the older single `video: ".."`
+const vids = (p) => (p.videos && p.videos.length ? p.videos : p.video ? [p.video] : []);
 const ytId = (u = "") => { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; };
 
 // Card thumbnail: if the project has a `video`, the video IS the thumbnail
@@ -10,14 +12,15 @@ function CardThumb({ p }) {
   const v = useRef();
   useEffect(() => {
     const el = v.current;
-    if (!p.video || !el || !matchMedia("(hover: none)").matches) return;
+    if (!vids(p)[0] || !el || !matchMedia("(hover: none)").matches) return;
     const o = new IntersectionObserver(([e]) => (e.isIntersecting ? el.play().catch(() => {}) : el.pause()), { threshold: 0.6 });
     o.observe(el); return () => o.disconnect();
-  }, [p.video]);
+  }, [p.video, p.videos]);
   const zoom = "w-full h-full object-cover group-hover:scale-105 transition duration-500";
-  if (p.video) return (
+  const first = vids(p)[0];
+  if (first) return (
     <>
-      <video ref={v} src={`${p.video}#t=0.1`} poster={p.image} muted loop playsInline preload="metadata" className={zoom}
+      <video ref={v} src={`${first}#t=0.1`} poster={p.image} muted loop playsInline preload="metadata" className={zoom}
         onMouseEnter={(e) => e.currentTarget.play().catch(() => {})}
         onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0.1; }} />
       <span className="chip absolute top-2 right-2 !bg-black/70">▶ Video</span>
@@ -54,7 +57,7 @@ export function ProjectCard({ p, onOpen }) {
 export function ProjectModal({ p, onClose }) {
   // Slider order: local video, YouTube video, then cover image + screenshots
   const media = [
-    ...(p.video ? [{ t: "video", src: p.video }] : []),
+    ...vids(p).map((src) => ({ t: "video", src })),
     ...(ytId(p.youtube) ? [{ t: "yt", id: ytId(p.youtube) }] : []),
     ...[p.image, ...(p.images || [])].map((src) => ({ t: "img", src })),
   ];
