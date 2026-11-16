@@ -8,8 +8,12 @@ export const projects = [
   {
     id: "bagheera-ludo", featured: true,
     title: "Bagheera Ludo", category: "Multiplayer",
-    image: "/images/projects/bagheera-ludo/cover.jpg",
-    images: ["/images/projects/bagheera-ludo/1.jpg", "/images/projects/bagheera-ludo/2.jpg"],
+    image: "/images/projects/<bagheera-ludo>/cover.jpg",
+images: [
+  "/images/projects/<bagheera-ludo>/1.jpg",
+  "/images/projects/<bagheera-ludo>/2.jpg",
+  "/images/projects/<bagheera-ludo>/3.jpg",
+],
     videos: [
   "/videos/projects/bagheera-ludo/1.mp4",
   "/videos/projects/bagheera-ludo/2.mp4",
@@ -26,7 +30,17 @@ export const projects = [
   {
     id: "bagheera-carrom", featured: true,
     title: "Bagheera Carrom", category: "Multiplayer",
-    image: "/images/projects/bagheera-carrom/cover.jpg", images: ["/images/projects/bagheera-carrom/1.jpg"],
+  image: "/images/projects/<bagheera-carrom>/cover.jpg",
+images: [
+  "/images/projects/<bagheera-carrom>/1.jpg",
+  "/images/projects/<bagheera-carrom>/2.jpg",
+  "/images/projects/<bagheera-carrom>/3.jpg",
+],
+videos: [
+  "/videos/projects/<bagheera-carrom>/1.mp4",
+  "/videos/projects/<bagheera-carrom>/2.mp4",
+  "/videos/projects/<bagheera-carrom>/3.mp4",
+],
     description: "Unity multiplayer carrom game built with Photon Fusion and C#.",
     role: "Unity Developer", technologies: ["Unity", "Photon Fusion", "C#"], platform: "Android, iOS",
     features: ["Online multiplayer", "Physics-based gameplay"],
@@ -35,7 +49,17 @@ export const projects = [
   {
     id: "xr-educational-activities", featured: true,
     title: "XR Educational Activities", category: "XR / MR",
-    image: "/images/projects/xr-educational/cover.jpg", images: [],
+    image: "/images/projects/<xr-educational-activities>/cover.jpg",
+images: [
+  "/images/projects/<xr-educational-activities>/1.jpg",
+  "/images/projects/<xr-educational-activities>/2.jpg",
+  "/images/projects/<xr-educational-activities>/3.jpg",
+],
+videos: [
+  "/videos/projects/<xr-educational-activities>/1.mp4",
+  "/videos/projects/<xr-educational-activities>/2.mp4",
+  "/videos/projects/<xr-educational-activities>/3.mp4",
+],
     description: "Interactive educational Mixed Reality activities for Meta Quest.",
     role: "XR Developer", technologies: ["Unity", "C#", "Meta Quest", "XR/MR"], platform: "Meta Quest",
     features: ["Interactive 3D objects", "Reusable activity modules"],
@@ -53,7 +77,17 @@ export const projects = [
   {
     id: "american-roulette",
     title: "American Roulette", category: "Games",
-    image: "/images/projects/american-roulette/cover.jpg", images: [],
+    image: "/images/projects/<american-roulette>/cover.jpg",
+images: [
+  "/images/projects/<american-roulette>/1.jpg",
+  "/images/projects/<american-roulette>/2.jpg",
+  "/images/projects/<american-roulette>/3.jpg",
+],
+videos: [
+  "/videos/projects/<american-roulette>/1.mp4",
+  "/videos/projects/<american-roulette>/2.mp4",
+  "/videos/projects/<american-roulette>/3.mp4",
+],
     description: "Unity multiplayer casino game with animation, UI/UX and 2D gameplay.",
     role: "Unity Developer", technologies: ["Unity", "C#", "Animation", "UI/UX", "2D"], platform: "Add platform",
     features: ["Multiplayer tables", "Animated wheel and UI"],
