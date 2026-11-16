@@ -6,6 +6,12 @@ import { Section, Img } from "./Section";
 const vids = (p) => (p.videos && p.videos.length ? p.videos : p.video ? [p.video] : []);
 const ytId = (u = "") => { const m = String(u).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; };
 
+// Blurred copy of the image behind the real one, so phone-shaped (portrait) media never gets cropped
+function Backdrop({ src }) {
+  return <img src={src} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 w-full h-full object-cover blur-2xl scale-125 opacity-60"
+    onError={(e) => { e.currentTarget.style.display = "none"; }} />;
+}
+
 // Card thumbnail: if the project has a `video`, the video IS the thumbnail
 // (plays on hover on desktop, autoplays muted while visible on phones). Otherwise it's the image.
 function CardThumb({ p }) {
@@ -16,20 +22,22 @@ function CardThumb({ p }) {
     const o = new IntersectionObserver(([e]) => (e.isIntersecting ? el.play().catch(() => {}) : el.pause()), { threshold: 0.6 });
     o.observe(el); return () => o.disconnect();
   }, [p.video, p.videos]);
-  const zoom = "w-full h-full object-cover group-hover:scale-105 transition duration-500";
+  const zoom = "relative w-full h-full object-contain group-hover:scale-105 transition duration-500";
   const first = vids(p)[0];
   if (first) return (
     <>
+      <Backdrop src={p.image} />
       <video ref={v} src={`${first}#t=0.1`} poster={p.image} muted loop playsInline preload="metadata" className={zoom}
         onMouseEnter={(e) => e.currentTarget.play().catch(() => {})}
         onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0.1; }} />
-      <span className="chip absolute top-2 right-2 !bg-black/70">▶ Video</span>
+      <span className="chip absolute top-2 right-2 z-10 !bg-black/70">▶ Video</span>
     </>
   );
   return (
     <>
+      <Backdrop src={p.image} />
       <Img src={p.image} alt={p.title} className={zoom} />
-      {ytId(p.youtube) && <span className="chip absolute top-2 right-2 !bg-black/70">▶ Video</span>}
+      {ytId(p.youtube) && <span className="chip absolute top-2 right-2 z-10 !bg-black/70">▶ Video</span>}
     </>
   );
 }
@@ -77,18 +85,18 @@ export function ProjectModal({ p, onClose }) {
           <div><span className="text-xs text-amber-300">{p.category}</span><h3 className="font-display text-2xl font-bold">{p.title}</h3></div>
           <button onClick={onClose} className="btn btn-ghost !py-1 !px-3" aria-label="Close">✕</button>
         </div>
-        <div className="relative mt-4 rounded-xl overflow-hidden aspect-video bg-black">
-          {m.t === "img" && <Img src={m.src} alt={`${p.title} screenshot ${i + 1}`} className="w-full h-full object-cover" />}
-          {m.t === "video" && <video key={i} src={m.src} poster={p.image} controls autoPlay muted playsInline className="w-full h-full object-contain" />}
-          {m.t === "yt" && <iframe key={i} src={`https://www.youtube-nocookie.com/embed/${m.id}`} title={`${p.title} video`} allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen className="w-full h-full" />}
+        <div className="relative mt-4 rounded-xl overflow-hidden h-[min(70vh,560px)] bg-black">
+          {m.t === "img" && <><Backdrop src={m.src} /><Img src={m.src} alt={`${p.title} screenshot ${i + 1}`} className="relative w-full h-full object-contain" /></>}
+          {m.t === "video" && <><Backdrop src={p.image} /><video key={i} src={m.src} poster={p.image} controls autoPlay muted playsInline className="relative w-full h-full object-contain" /></>}
+          {m.t === "yt" && <iframe key={i} src={`https://www.youtube-nocookie.com/embed/${m.id}`} title={`${p.title} video`} allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen className="relative w-full h-full" />}
           {media.length > 1 && <>
-            <button onClick={() => go(-1)} className="absolute left-2 top-1/3 btn glass !p-2" aria-label="Previous">‹</button>
-            <button onClick={() => go(1)} className="absolute right-2 top-1/3 btn glass !p-2" aria-label="Next">›</button>
+            <button onClick={() => go(-1)} className="absolute left-2 top-1/2 z-10 btn glass !p-2" aria-label="Previous">‹</button>
+            <button onClick={() => go(1)} className="absolute right-2 top-1/2 z-10 btn glass !p-2" aria-label="Next">›</button>
           </>}
         </div>
         {media.length > 1 && <div className="flex gap-2 mt-2 overflow-x-auto">{media.map((x, n) => (
-          <button key={n} onClick={() => setI(n)} className={`relative w-20 shrink-0 rounded overflow-hidden border ${n === i ? "border-orange-500" : "border-transparent opacity-60"}`}>
-            <Img src={x.t === "img" ? x.src : p.image} alt={`${p.title} thumb ${n + 1}`} className="aspect-video object-cover" />
+          <button key={n} onClick={() => setI(n)} className={`relative w-16 shrink-0 rounded overflow-hidden border ${n === i ? "border-orange-500" : "border-transparent opacity-60"}`}>
+            <Img src={x.t === "img" ? x.src : p.image} alt={`${p.title} thumb ${n + 1}`} className="aspect-square w-full object-cover" />
             {x.t !== "img" && <span className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-sm">▶</span>}
           </button>
         ))}</div>}
