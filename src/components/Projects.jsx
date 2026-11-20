@@ -12,33 +12,34 @@ function Backdrop({ src }) {
     onError={(e) => { e.currentTarget.style.display = "none"; }} />;
 }
 
-// Card thumbnail: if the project has a `video`, the video IS the thumbnail
-// (plays on hover on desktop, autoplays muted while visible on phones). Otherwise it's the image.
+// Card thumbnail: always shows the cover image. If the project has a video, the video fades in
+// and plays while the cursor is on the card, and goes back to the cover image when the cursor leaves.
+// (Phones have no hover, so there the video plays muted while the card is on screen.)
 function CardThumb({ p }) {
   const v = useRef();
+  const [on, setOn] = useState(false);
+  const first = vids(p)[0];
+  const touch = typeof matchMedia !== "undefined" && matchMedia("(hover: none)").matches;
+  const start = () => { const el = v.current; if (el) el.play().then(() => setOn(true)).catch(() => {}); };
+  const stop = () => { const el = v.current; if (el) { el.pause(); el.currentTime = 0; } setOn(false); };
   useEffect(() => {
     const el = v.current;
-    if (!vids(p)[0] || !el || !matchMedia("(hover: none)").matches) return;
-    const o = new IntersectionObserver(([e]) => (e.isIntersecting ? el.play().catch(() => {}) : el.pause()), { threshold: 0.6 });
+    if (!first || !el || !touch) return;
+    const o = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), { threshold: 0.6 });
     o.observe(el); return () => o.disconnect();
-  }, [p.video, p.videos]);
-  const zoom = "relative w-full h-full object-contain group-hover:scale-105 transition duration-500";
-  const first = vids(p)[0];
-  if (first) return (
-    <>
-      <Backdrop src={p.image} />
-      <video ref={v} src={`${first}#t=0.1`} poster={p.image} muted loop playsInline preload="metadata" className={zoom}
-        onMouseEnter={(e) => e.currentTarget.play().catch(() => {})}
-        onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0.1; }} />
-      <span className="chip absolute top-2 right-2 z-10 !bg-black/70">▶ Video</span>
-    </>
-  );
+  }, [first, touch]);
   return (
-    <>
+    <div className="absolute inset-0" onMouseEnter={first ? start : undefined} onMouseLeave={first ? stop : undefined}>
       <Backdrop src={p.image} />
-      <Img src={p.image} alt={p.title} className={zoom} />
-      {ytId(p.youtube) && <span className="chip absolute top-2 right-2 z-10 !bg-black/70">▶ Video</span>}
-    </>
+      <Img src={p.image} alt={p.title} className="relative w-full h-full object-contain group-hover:scale-105 transition duration-500" />
+      {first && (
+        <div className="absolute inset-0 bg-black transition-opacity duration-300" style={{ opacity: on ? 1 : 0 }}>
+          <Backdrop src={p.image} />
+          <video ref={v} src={first} muted loop playsInline preload="metadata" className="relative w-full h-full object-contain" />
+        </div>
+      )}
+      {(first || ytId(p.youtube)) && <span className="chip absolute top-2 right-2 z-10 !bg-black/70">▶ Video</span>}
+    </div>
   );
 }
 
